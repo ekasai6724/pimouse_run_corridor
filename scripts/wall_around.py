@@ -34,7 +34,7 @@ class WallAround():
 		return ls.left_side > 50
 
 	def run(self):
-		freq = get_freq()
+		freq = self.get_freq()
 		rate = rospy.Rate(freq)
 		data = Twist()
 
