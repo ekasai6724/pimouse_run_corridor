@@ -11,20 +11,31 @@ class WallAround():
 		self.sensor_values = LightSensorValues()
 		rospy.Subscriber('/lightsensors', LightSensorValues, self.callback)
 
-	def callback(self,messages):
+	def callback(self, messages):
 		self.sensor_values = messages
 
-	def wall_front(self,ls):
+	def get_freq(self):
+		f = rospy.get_param('lightsensors_freq', 10)
+		try:
+			if f <= 0.0:
+				raise Exception()
+		except:
+			rospy.logerr("Value error: lightsensors_freq")
+			sys.exit(1)
+		return f
+
+	def wall_front(self, ls):
 		return ls.left_forward > 50 or ls.right_forward > 50
 
-	def too_right(self,ls):
+	def too_right(self, ls):
 		return ls.right_side > 50
 
-	def too_left(delf,ls):
+	def too_left(self, ls):
 		return ls.left_side > 50
-	 
+
 	def run(self):
-		rate = rospy.Rate(20)
+		freq = get_freq()
+		rate = rospy.Rate(freq)
 		data = Twist()
 
 		data.linear.x = 0.3
