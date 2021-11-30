@@ -1,6 +1,6 @@
 <launch>
   <arg name="freq" default="10"/>
-  <param name="lightsensors_freq" value=$(freq) />
+  <param name="lightsensors_freq" value="$(freq)" />
   <include file="$(find pimouse_ros)/launch/pimouse.launch" />
   <node pkg="pimouse_run_corridor" name="wall_around" type="wall_around.py" required="true" />
 </launch>
