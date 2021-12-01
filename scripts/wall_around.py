@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding:utf8
 import rospy,copy,math
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger, TriggerResponse
