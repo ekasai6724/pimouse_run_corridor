@@ -33,22 +33,40 @@ class WallAround():
 
 	def too_left(self, ls):
 		return ls.left_side > 50
-
+	
+	def vel_accel(self, vel, target, accel):
+		vtmp = vel
+		if vtmp < target:
+			vtmp += accel
+			if vtmp > target: vtmp = target
+		else:
+			vtmp -= accel
+			if vtmp < target: vtmp = target
+		
+		return vtmp
+		
 	def run(self):
 		freq = self.get_freq()
 		rate = rospy.Rate(freq)
 		data = Twist()
 
-		data.linear.x = 0.3
-		data.angular.z = 0.0
+		vl = 0.0
+		va = 0.0
+		vl_tgt = 0.3
+		va_tgt = 0.0
 		while not rospy.is_shutdown():
 			if self.wall_front(self.sensor_values):
-				data.linear.x = 0.1
-				data.angular.z = -math.pi
+				vl_tgt = 0.05
+				va_tgt = -math.pi
 			else:
-				data.linear.x = 0.3
+				vl_tgt = 0.3
 				e = 50 - self.sensor_values.left_side
-				data.angular.z = e * math.pi / 50.0
+				va_tgt = e * 2.0 * math.pi / 180.0
+			
+			vl = self.vel_accel(vl, vl_tgt, 0.02)
+			va = self.vel_accel(va, va_tgt, 0.5)
+			data.linear.x = vl
+			data.angular.z = va
 
 			self.cmd_vel.publish(data)
 			rate.sleep()
