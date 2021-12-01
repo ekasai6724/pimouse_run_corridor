@@ -43,16 +43,10 @@ class WallAround():
 		data.angular.z = 0.0
 		while not rospy.is_shutdown():
 			if self.wall_front(self.sensor_values):
-				data.linear.x = 0.05
-				if self.sensor_values.left_side > self.sensor_values.right_side:
-					data.angular.z = -math.pi		# 左の壁のほうが近い→右旋回
-				else:
-					data.angular.z = math.pi		# 右の壁のほうが近い→左旋回
+				data.linear.x = 0.1
+				data.angular.z = -math.pi
 			else:
-				if self.sensor_values.left_side < 40:
-					data.linear.x = 0.05
-				else:
-					data.linear.x = 0.3
+				data.linear.x = 0.3
 				e = 50 - self.sensor_values.left_side
 				data.angular.z = e * math.pi / 50.0
 
