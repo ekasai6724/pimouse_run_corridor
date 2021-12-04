@@ -1,0 +1,11 @@
+<launch>
+  <arg name="freq" default="10"/>
+  <param name="lightsensors_freq" value="$(arg freq)" />
+  <include file="$(find pimouse_ros)/launch/pimouse.launch" />
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    <arg name="port" value="9000" />
+  </include>
+  <node pkg="pimouse_run_corridor" name="wall_demo" type="wall_demo.py" required="true" />
+  <node pkg="pimouse_run_corridor" name="webserver" type="webserver.py" args="8000" />
+</launch>
+
